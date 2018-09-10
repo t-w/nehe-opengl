@@ -77,10 +77,10 @@ int loadBMP(char *filename, textureImage *texture)
 {
     FILE *file;
     unsigned short int bfType;
-    long int bfOffBits;
+    int bfOffBits;
     short int biPlanes;
     short int biBitCount;
-    long int biSizeImage;
+    int biSizeImage;
     int i;
     unsigned char temp;
     /* make sure the file is there and open it read-only (binary) */
@@ -104,12 +104,12 @@ int loadBMP(char *filename, textureImage *texture)
     /* skip file size and reserved fields of bitmap file header */
     fseek(file, 8, SEEK_CUR);
     /* get the position of the actual bitmap data */
-    if (!fread(&bfOffBits, sizeof(long int), 1, file))
+    if (!fread(&bfOffBits, sizeof(int), 1, file))
     {
         printf("Error reading file!\n");
         return 0;
     }
-    printf("Data at Offset: %ld\n", bfOffBits);
+    printf("Data at Offset: %d\n", bfOffBits);
     /* skip size of bitmap info header */
     fseek(file, 4, SEEK_CUR);
     /* get the width of the bitmap */
@@ -139,7 +139,7 @@ int loadBMP(char *filename, textureImage *texture)
     }
     /* calculate the size of the image in bytes */
     biSizeImage = texture->width * texture->height * 3;
-    printf("Size of the image data: %ld\n", biSizeImage);
+    printf("Size of the image data: %d\n", biSizeImage);
     texture->data = malloc(biSizeImage);
     /* seek to the actual data */
     fseek(file, bfOffBits, SEEK_SET);
@@ -154,7 +154,7 @@ int loadBMP(char *filename, textureImage *texture)
         temp = texture->data[i];
         texture->data[i] = texture->data[i + 2];
         texture->data[i + 2] = temp;
-    } 
+    }
     return 1;
 }
 
